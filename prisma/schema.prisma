@@ -36,16 +36,14 @@ model Intensive {
 }
 
 // Page: Storage -> Files
+// 
 model File {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  title        String
-  previewImage String @map("preview_image")
-  file         String
-
-  // распределить по подпискам и как-то их разделить по платным и бесплатным
+  title   String
+  fileUrl String @map("file_url")
 
   @@map("files")
 }
