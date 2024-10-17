@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://www.youtube.com/@NikitaBenzin" target="blank"><img src="https://ibb.co/mGZjHjD" width="200" alt="NikitaBenzin Logo" /></a>
+  <a href="https://www.youtube.com/@NikitaBenzin" target="blank"><img src="https://i.ibb.co/PmkMhMV/blank-profile-picture.png" width="200" alt="NikitaBenzin Logo" /></a>
 </p>
 
 ## Description

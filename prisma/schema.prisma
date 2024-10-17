@@ -15,7 +15,7 @@ model User {
   email            String            @unique
   name             String?
   password         String
-  image            String?           @default("https://ibb.co/dWZt2tH")
+  image            String?           @default("https://i.ibb.co/PmkMhMV/blank-profile-picture.png")
   subscriptionType SubscriptionType? @default(free)
   Subscription     Subscription[]
 
