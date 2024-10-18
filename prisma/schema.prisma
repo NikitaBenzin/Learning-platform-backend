@@ -12,14 +12,44 @@ model User {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  email            String            @unique
+  email            String             @unique
   name             String?
   password         String
-  image            String?           @default("https://i.ibb.co/PmkMhMV/blank-profile-picture.png")
-  subscriptionType SubscriptionType? @default(free)
-  Subscription     Subscription[]
+  image            String?            @default("https://i.ibb.co/PmkMhMV/blank-profile-picture.png")
+  userSubscription UserSubscription[]
 
   @@map("user")
+}
+
+model SubscriptionPlan {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  name               String             @unique
+  price              Float
+  duration           Int // Duration in days (for example, 30 for monthly, 365 for yearly)
+  usersSubscriptions UserSubscription[]
+
+  @@map("subscription_plan")
+}
+
+model UserSubscription {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  userId             String
+  subscriptionPlanId String
+  startDate          DateTime @default(now())
+  endDate            DateTime
+  isActive           Boolean  @default(true)
+
+  user             User             @relation(fields: [userId], references: [id])
+  subscriptionPlan SubscriptionPlan @relation(fields: [subscriptionPlanId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, subscriptionPlanId, startDate])
+  @@map("user_subscription")
 }
 
 model Intensive {
@@ -29,14 +59,12 @@ model Intensive {
 
   title        String
   description  String
-  video        String
-  previewImage String @map("preview_image")
+  video        String[]
+  previewImage String   @map("preview_image")
 
   @@map("intensive")
 }
 
-// Page: Storage -> Files
-// 
 model File {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now()) @map("created_at")
@@ -46,26 +74,4 @@ model File {
   fileUrl String @map("file_url")
 
   @@map("files")
-}
-
-model Subscription {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
-
-  subscriptionType SubscriptionType
-  price            Int?
-  startedAt        DateTime?        @map("started_at")
-  endedAt          DateTime?        @map("ended_at")
-
-  @@map("subscriptions")
-}
-
-enum SubscriptionType {
-  free
-  monthly
-  yearly
 }
