@@ -12,11 +12,12 @@ model User {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  email            String             @unique
-  name             String?
-  password         String
-  image            String?            @default("https://i.ibb.co/PmkMhMV/blank-profile-picture.png")
-  userSubscription UserSubscription[]
+  email    String  @unique
+  name     String?
+  password String
+  image    String? @default("https://i.ibb.co/PmkMhMV/blank-profile-picture.png")
+
+  userSubscription UserSubscription?
 
   @@map("user")
 }
@@ -29,6 +30,7 @@ model SubscriptionPlan {
   name               String             @unique
   price              Float
   duration           Int // Duration in days (for example, 30 for monthly, 365 for yearly)
+  description        String[]
   usersSubscriptions UserSubscription[]
 
   @@map("subscription_plan")
@@ -39,14 +41,15 @@ model UserSubscription {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  userId             String
   subscriptionPlanId String
   startDate          DateTime @default(now())
   endDate            DateTime
   isActive           Boolean  @default(true)
 
-  user             User             @relation(fields: [userId], references: [id])
   subscriptionPlan SubscriptionPlan @relation(fields: [subscriptionPlanId], references: [id], onDelete: Cascade)
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @unique
 
   @@unique([userId, subscriptionPlanId, startDate])
   @@map("user_subscription")
