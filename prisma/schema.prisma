@@ -12,6 +12,7 @@ model User {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
+  isAdmin  Boolean @default(false)
   email    String  @unique
   name     String?
   password String
@@ -62,8 +63,8 @@ model Intensive {
 
   title        String
   description  String
-  video        String[]
-  previewImage String   @map("preview_image")
+  video        Video[]
+  previewImage String  @map("preview_image")
 
   @@map("intensive")
 }
@@ -77,4 +78,18 @@ model File {
   fileUrl String @map("file_url")
 
   @@map("files")
+}
+
+model Video {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  title       String
+  description String?
+  videoUrl    String    @map("video_url")
+  intensive   Intensive @relation(fields: [intensiveId], references: [id], onDelete: Cascade)
+  intensiveId String
+
+  @@map("video")
 }
