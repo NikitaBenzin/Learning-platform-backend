@@ -22,11 +22,12 @@ export class IntensiveController {
 		return this.intensiveService.getAll()
 	}
 
-	@Get(':title')
-	async getIntensive(@Param('title') title: string) {
-		return this.intensiveService.getByTitle(title)
+	@Get(':name')
+	async getIntensive(@Param('name') name: string) {
+		return this.intensiveService.getByName(name)
 	}
 
+	// All methods bellow only for ADMIN
 	@Post()
 	async createIntensive(@Body() dto: IntensiveDto) {
 		return this.intensiveService.create(dto)
@@ -34,12 +35,9 @@ export class IntensiveController {
 
 	@UsePipes(new ValidationPipe())
 	@HttpCode(200)
-	@Put(':title')
-	async updateIntensive(
-		@Param('title') title: string,
-		@Body() dto: IntensiveDto
-	) {
-		return this.intensiveService.update(title, dto)
+	@Put(':id')
+	async updateIntensive(@Param('id') id: string, @Body() dto: IntensiveDto) {
+		return this.intensiveService.update(id, dto)
 	}
 
 	@Delete(':id')

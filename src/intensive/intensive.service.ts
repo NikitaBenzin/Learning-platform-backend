@@ -10,21 +10,21 @@ export class IntensiveService {
 		return this.prisma.intensive.findMany()
 	}
 
-	getByTitle(title: string) {
+	getByName(name: string) {
 		const intensive = this.prisma.intensive.findFirst({
-			where: { title },
+			where: { name },
 			include: { video: true }
 		})
 
 		if (!intensive)
-			throw new NotFoundException(`Intensive with title "${title}" not found`)
+			throw new NotFoundException(`Intensive with name "${name}" not found`)
 
 		return intensive
 	}
 
 	async create(dto: IntensiveDto) {
 		const intensive = {
-			title: dto.title,
+			name: dto.name,
 			description: dto.description,
 			previewImage: dto.previewImage
 		}
@@ -34,13 +34,13 @@ export class IntensiveService {
 		})
 	}
 
-	// Нужно прокидывать id чтобы обновлять
-	async update(title: string, dto: IntensiveDto) {
+	async update(id: string, dto: IntensiveDto) {
 		const data = dto
 		return this.prisma.intensive.update({
 			where: {
-				title
-			}
+				id
+			},
+			data
 		})
 	}
 

@@ -12,29 +12,20 @@ model User {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  isAdmin  Boolean @default(false)
   email    String  @unique
   name     String?
   password String
   image    String? @default("https://i.ibb.co/PmkMhMV/blank-profile-picture.png")
+  role     Role    @default(USER)
 
-  userSubscription UserSubscription?
+  subscription UserSubscription?
 
   @@map("user")
 }
 
-model SubscriptionPlan {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  name               String             @unique
-  price              Float
-  duration           Int // Duration in days (for example, 30 for monthly, 365 for yearly)
-  description        String[]
-  usersSubscriptions UserSubscription[]
-
-  @@map("subscription_plan")
+enum Role {
+  USER
+  ADMIN
 }
 
 model UserSubscription {
@@ -56,12 +47,26 @@ model UserSubscription {
   @@map("user_subscription")
 }
 
+model SubscriptionPlan {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  name               String             @unique
+  price              Float
+  duration           Int // Duration in days (for example, 30 for monthly, 365 for yearly)
+  description        String[]
+  usersSubscriptions UserSubscription[]
+
+  @@map("subscription_plan")
+}
+
 model Intensive {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  title        String
+  name         String  @unique
   description  String
   video        Video[]
   previewImage String  @map("preview_image")
@@ -69,27 +74,27 @@ model Intensive {
   @@map("intensive")
 }
 
-model File {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  title   String
-  fileUrl String @map("file_url")
-
-  @@map("files")
-}
-
 model Video {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  title       String
+  name        String
   description String?
   videoUrl    String    @map("video_url")
   intensive   Intensive @relation(fields: [intensiveId], references: [id], onDelete: Cascade)
   intensiveId String
 
   @@map("video")
+}
+
+model File {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  name    String
+  fileUrl String @map("file_url")
+
+  @@map("files")
 }
