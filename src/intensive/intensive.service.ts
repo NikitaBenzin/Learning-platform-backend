@@ -1,13 +1,17 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { PrismaService } from 'src/prisma.service'
-import { IntensiveDto } from './dto/intensive.dto'
+import type { IntensiveDto } from './dto/intensive.dto'
 
 @Injectable()
 export class IntensiveService {
 	constructor(private prisma: PrismaService) {}
 
 	getAll() {
-		return this.prisma.intensive.findMany()
+		return this.prisma.intensive.findMany({
+			orderBy: {
+				createdAt: 'asc'
+			}
+		})
 	}
 
 	getByName(name: string) {

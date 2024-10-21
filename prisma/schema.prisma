@@ -12,12 +12,11 @@ model User {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  email    String  @unique
-  name     String?
-  password String
-  image    String? @default("https://i.ibb.co/PmkMhMV/blank-profile-picture.png")
-  role     Role    @default(USER)
-
+  email        String            @unique
+  name         String?
+  password     String
+  image        String?           @default("https://i.ibb.co/PmkMhMV/blank-profile-picture.png")
+  role         Role              @default(USER)
   subscription UserSubscription?
 
   @@map("user")
@@ -34,9 +33,9 @@ model UserSubscription {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   subscriptionPlanId String
-  startDate          DateTime @default(now())
+  startDate          DateTime
   endDate            DateTime
-  isActive           Boolean  @default(true)
+  isActive           Boolean
 
   subscriptionPlan SubscriptionPlan @relation(fields: [subscriptionPlanId], references: [id], onDelete: Cascade)
 
@@ -53,9 +52,9 @@ model SubscriptionPlan {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   name               String             @unique
-  price              Float
+  price              Int
   duration           Int // Duration in days (for example, 30 for monthly, 365 for yearly)
-  description        String[]
+  description        String
   usersSubscriptions UserSubscription[]
 
   @@map("subscription_plan")
@@ -89,7 +88,7 @@ model Video {
 }
 
 model File {
-  id        String   @id @default(cuid())
+  id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 

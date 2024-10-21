@@ -1,8 +1,8 @@
 import { ConflictException, Injectable } from '@nestjs/common'
 import { hash } from 'argon2'
-import { AuthDto } from 'src/auth/dto/auth.dto'
+import type { AuthDto } from 'src/auth/dto/auth.dto'
 import { PrismaService } from 'src/prisma.service'
-import { UserDto } from './dto/user.dto'
+import type { UserDto } from './dto/user.dto'
 
 @Injectable()
 export class UserService {
@@ -19,15 +19,15 @@ export class UserService {
 
 	getByEmail(email: string) {
 		return this.prisma.user.findUnique({
-			where: { email }
+			where: { email },
+			include: { subscription: true }
 		})
 	}
 
 	async getProfile(id: string) {
 		const profile = await this.getById(id)
-
 		const subscriptionEndDate =
-			profile.subscription?.endDate && 'No subscription'
+			profile.subscription == null ? 'No subscription' : profile.subscription
 
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const { password, ...data } = profile
@@ -46,7 +46,10 @@ export class UserService {
 		}
 
 		return this.prisma.user.create({
-			data: user
+			data: user,
+			include: {
+				subscription: true
+			}
 		})
 	}
 
