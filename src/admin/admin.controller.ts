@@ -32,7 +32,7 @@ export class AdminController {
 	@Auth()
 	async getAdminProfile(
 		@CurrentUser('id') id: string,
-		@CurrentUser('role') role: string
+		@CurrentUser('role') role: Role | undefined
 	) {
 		if (AdminGuard(role)) return this.adminService.getById(id)
 	}

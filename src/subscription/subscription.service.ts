@@ -1,14 +1,10 @@
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from 'src/prisma.service'
-import { UserService } from 'src/user/user.service'
 import type { SubscriptionDto } from './dto/subscription.dto'
 
 @Injectable()
 export class SubscriptionService {
-	constructor(
-		private prisma: PrismaService,
-		private userService: UserService
-	) {}
+	constructor(private prisma: PrismaService) {}
 
 	getAll() {
 		return this.prisma.subscriptionPlan.findMany({
@@ -26,19 +22,10 @@ export class SubscriptionService {
 		})
 	}
 
-	async createUserSubscription(subscriptionPlanId: string, userId: string) {
-		const oldUser = await this.userService.getById(userId)
-		const subscriptionPlan = await this.getById(subscriptionPlanId)
-
-		if (oldUser.subscription == null) {
-			const startDate = new Date()
-			const endDate = new Date()
-			endDate.setDate(startDate.getDate() + subscriptionPlan.duration)
+	async createUserSubscription(userId: string, subscriptionPlanName: string) {
+		if (subscriptionPlanName === 'Free') {
 			const newSubscription = {
-				subscriptionPlanId,
-				startDate,
-				endDate,
-				isActive: true,
+				subscriptionPlanName,
 				userId
 			}
 
@@ -46,6 +33,12 @@ export class SubscriptionService {
 				data: newSubscription
 			})
 		} else {
+			const subscriptionPlan = await this.prisma.subscriptionPlan.findUnique({
+				where: {
+					id: subscriptionPlanName
+				}
+			})
+
 			const userSubscription = await this.prisma.userSubscription.findUnique({
 				where: {
 					userId
@@ -68,7 +61,18 @@ export class SubscriptionService {
 		}
 	}
 
-	async create(dto: SubscriptionDto) {
+	removeSubscription(userId: string) {
+		return this.prisma.userSubscription.update({
+			where: {
+				userId
+			},
+			data: {
+				isActive: false
+			}
+		})
+	}
+
+	create(dto: SubscriptionDto) {
 		const subscription = {
 			name: dto.name,
 			price: dto.price,
@@ -81,7 +85,7 @@ export class SubscriptionService {
 		})
 	}
 
-	async update(id: string, dto: SubscriptionDto) {
+	update(id: string, dto: SubscriptionDto) {
 		const data = dto
 		return this.prisma.subscriptionPlan.update({
 			where: {
