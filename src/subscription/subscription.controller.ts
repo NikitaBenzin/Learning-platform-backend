@@ -19,8 +19,8 @@ export class SubscriptionController {
 		@CurrentUser('id') userId: string
 	) {
 		return this.subscriptionService.createUserSubscription(
-			subscriptionPlanId,
-			userId
+			userId,
+			subscriptionPlanId
 		)
 	}
 }
