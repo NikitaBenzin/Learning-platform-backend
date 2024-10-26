@@ -1,6 +1,11 @@
 import { ConflictException, Injectable } from '@nestjs/common'
+import { User } from '@prisma/client'
 import { hash } from 'argon2'
 import type { AuthDto } from 'src/auth/dto/auth.dto'
+import {
+	IGithubProfile,
+	IGoogleProfile
+} from 'src/auth/social-media/social-media-auth-types'
 import { PrismaService } from 'src/prisma.service'
 import type { UserDto } from './dto/user.dto'
 
@@ -39,16 +44,41 @@ export class UserService {
 	}
 
 	async create(dto: AuthDto) {
-		const user = {
-			email: dto.email,
-			name: '',
-			password: await hash(dto.password)
+		return this.prisma.user.create({
+			data: {
+				...dto,
+				password: await hash(dto.password)
+			}
+		})
+	}
+
+	async findOrCreateSocialUser(profile: IGoogleProfile | IGithubProfile) {
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars, prefer-const
+		let { subscription, ...user } = await this.getByEmail(profile.email)
+
+		if (!user) {
+			user = await this._createSocialUser(profile)
 		}
+		return user
+	}
+
+	private async _createSocialUser(
+		profile: IGoogleProfile | IGithubProfile
+	): Promise<User> {
+		const email = profile.email
+		const name =
+			'firstName' in profile
+				? `${profile.firstName} ${profile.lastName}`
+				: profile.username
+		const picture = profile.picture || ''
 
 		return this.prisma.user.create({
-			data: user,
-			include: {
-				subscription: true
+			data: {
+				email,
+				name,
+				password: '',
+				verificationToken: null,
+				avatarPath: picture
 			}
 		})
 	}
