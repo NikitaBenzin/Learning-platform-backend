@@ -8,7 +8,7 @@
 
 A backend service for an online course platform providing subscription-based access to courses.
 
-### Стек технологий
+### Tech Stack
 
 - NestJS
 - Prisma ORM
