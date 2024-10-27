@@ -37,14 +37,14 @@ $ npm run start
 
 # **API Endpoints**
 
-#### For user
+### For user
 
 - User Management: Routes for user registration, login, and getting profile.
 - Subscription Management: Routes for getting subscription or subscription renewal.
 - Intensive Management: Routes for getting intensives and videos.
 - Storage Management: Routes for getting files from storage (Only with PREMIUM role)
 
-#### For admin
+### For admin
 
 - ~~User Management: Routes for users adding, updating, removing.~~
 - Subscription Management: Routes for subscriptions adding, updating, removing.
@@ -55,51 +55,51 @@ $ npm run start
 
 ## For USER
 
-#### User management
+### User management
 
 <span style="color:#bdbdbd; border-radius: 10px;">GET</span> SITE_URL/user - get profile
 <span style="color:#ff9900; border-radius: 10px;">PUT</span> SITE_URL/user/settings - update user profile
 
-#### Subscription management
+### Subscription management
 
 <span style="color:#bdbdbd; border-radius: 10px;">GET</span> SITE_URL/subscription - get all subscriptions
 <span style="color:#00c947; border-radius: 10px;">POST</span> SITE_URL/subscription/:id - create user subscription depending on subscription
 
-#### Intensive management
+### Intensive management
 
 <span style="color:#bdbdbd; border-radius: 10px;">GET</span> SITE_URL/intensives - get all intensives
 <span style="color:#bdbdbd; border-radius: 10px;">GET</span> SITE_URL/intensives/:name - get intensive by name
 <span style="color:#bdbdbd; border-radius: 10px;">GET</span> SITE_URL/intensives/:intensiveName/:videoName - get video from intensive
 
-#### Storage management
+### Storage management
 
 <span style="color:#bdbdbd; border-radius: 10px;">GET</span> SITE_URL/storage - get all files from storage
 
 ## For ADMIN
 
-#### Self management
+### Self management
 
 <span style="color:#bdbdbd; border-radius: 10px;">GET</span> SITE_URL/admin - get admin profile
 
-#### Subscription management
+### Subscription management
 
 <span style="color:#00c947; border-radius: 10px;">POST</span> SITE_URL/subscription - create subscription
 <span style="color:#ff9900; border-radius: 10px;">PUT</span> SITE_URL/subscription/:id - update subscription
 <span style="color:#d10000; border-radius: 10px;">DELETE</span> SITE_URL/subscription/:id - delete subscription
 
-#### Intensive management
+### Intensive management
 
 <span style="color:#00c947; border-radius: 10px;">POST</span> SITE_URL/intensive - create intensive
 <span style="color:#ff9900; border-radius: 10px;">PUT</span> SITE_URL/intensive/:id - update intensive
 <span style="color:#d10000; border-radius: 10px;">DELETE</span> SITE_URL/intensive/:id - delete intensive
 
-#### Storage management
+### Storage management
 
 <span style="color:#00c947; border-radius: 10px;">POST</span> SITE_URL/storage - create file
 <span style="color:#ff9900; border-radius: 10px;">PUT</span> SITE_URL/storage/:id - update file
 <span style="color:#d10000; border-radius: 10px;">DELETE</span> SITE_URL/storage/:id - delete file from storage
 
-#### Video management
+### Video management
 
 <span style="color:#00c947; border-radius: 10px;">POST</span> SITE_URL/intensive/video - create video
 <span style="color:#ff9900; border-radius: 10px;">PUT</span> SITE_URL/intensive/video/:id - update video
