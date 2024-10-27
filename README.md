@@ -122,5 +122,5 @@ $ npm run test:cov
 
 - Author - Mykyta Korotych
 
-Telegram [NikitaBenzin]('t.me/benzingroupchannel') <br>
-Youtube [NikitaBenzin]('https://www.youtube.com/@NikitaBenzin')
+[Telegram]('t.me/benzingroupchannel') <br>
+[Youtube]('https://www.youtube.com/@NikitaBenzin')
