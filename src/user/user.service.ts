@@ -5,7 +5,7 @@ import type { AuthDto } from 'src/auth/dto/auth.dto'
 import {
 	IGithubProfile,
 	IGoogleProfile
-} from 'src/auth/social-media/social-media-auth-types'
+} from 'src/auth/social-media/social-media-auth.types'
 import { PrismaService } from 'src/prisma.service'
 import { SubscriptionService } from 'src/subscription/subscription.service'
 import type { UserDto } from './dto/user.dto'
@@ -35,11 +35,20 @@ export class UserService {
 
 	async getProfile(id: string) {
 		const profile = await this.getById(id)
-		const subscriptionEndDate =
-			profile.subscription == null ? 'No subscription' : profile.subscription
+		let subscriptionEndDate: string
 
 		if (profile.subscription == null)
-			await this.subscriptionService.createUserSubscription(id, 'Free')
+			await this.subscriptionService.createUserSubscription(id)
+
+		if (profile.subscription.isActive === false) {
+			subscriptionEndDate = 'No subscription'
+		} else {
+			const day = profile.subscription.endDate.getDate()
+			const month = profile.subscription.endDate.getMonth() + 1
+			const year = profile.subscription.endDate.getFullYear()
+
+			subscriptionEndDate = `${day}.${month}.${year}`
+		}
 
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const { password, ...data } = profile
@@ -51,12 +60,17 @@ export class UserService {
 	}
 
 	async create(dto: AuthDto) {
-		return this.prisma.user.create({
+		const user = await this.prisma.user.create({
 			data: {
 				...dto,
 				password: await hash(dto.password)
+			},
+			include: {
+				subscription: true
 			}
 		})
+
+		return user
 	}
 
 	async findOrCreateSocialUser(profile: IGoogleProfile | IGithubProfile) {

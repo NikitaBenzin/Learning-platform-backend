@@ -34,17 +34,17 @@ model UserSubscription {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  subscriptionPlanName String
-  startDate            DateTime @default(now())
-  endDate              DateTime @default(now())
-  isActive             Boolean  @default(false)
+  subscriptionPlanId String
+  startDate          DateTime? @default(now())
+  endDate            DateTime? @default(now())
+  isActive           Boolean?  @default(false)
 
-  subscriptionPlan SubscriptionPlan @relation(fields: [subscriptionPlanName], references: [name], onDelete: Cascade)
+  subscriptionPlan SubscriptionPlan @relation(fields: [subscriptionPlanId], references: [id], onDelete: Cascade)
 
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String @unique
 
-  @@unique([userId, subscriptionPlanName, startDate])
+  @@unique([userId, subscriptionPlanId, startDate])
   @@map("user_subscription")
 }
 
@@ -54,7 +54,7 @@ model SubscriptionPlan {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   name               String             @unique
-  price              Int
+  price              Int                @unique
   duration           Int // Duration in days (for example, 30 for monthly, 365 for yearly)
   description        String
   usersSubscriptions UserSubscription[]

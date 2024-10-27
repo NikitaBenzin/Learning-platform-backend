@@ -12,8 +12,8 @@ export class SubscriptionController {
 		return this.subscriptionService.getAll()
 	}
 
-	@Post(':id')
 	@Auth()
+	@Post(':id')
 	async createUserSubscription(
 		@Param('id') subscriptionPlanId: string,
 		@CurrentUser('id') userId: string

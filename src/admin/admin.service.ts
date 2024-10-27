@@ -6,10 +6,7 @@ export class AdminService {
 	constructor(private prisma: PrismaService) {}
 	getById(id: string) {
 		return this.prisma.user.findUnique({
-			where: { id },
-			include: {
-				subscription: true
-			}
+			where: { id }
 		})
 	}
 }

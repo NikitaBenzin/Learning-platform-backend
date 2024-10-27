@@ -5,13 +5,11 @@ import { getJwtConfig } from 'src/config/jwt.config'
 import { IntensiveModule } from 'src/intensive/intensive.module'
 import { PrismaService } from 'src/prisma.service'
 import { SubscriptionModule } from 'src/subscription/subscription.module'
-import { UserModule } from 'src/user/user.module'
 import { AdminController } from './admin.controller'
 import { AdminService } from './admin.service'
 
 @Module({
 	imports: [
-		UserModule,
 		IntensiveModule,
 		SubscriptionModule,
 		ConfigModule,

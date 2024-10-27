@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 
+import { ScheduleModule } from '@nestjs/schedule'
 import { GoogleRecaptchaModule } from '@nestlab/google-recaptcha'
 import { AdminModule } from './admin/admin.module'
 import { AuthModule } from './auth/auth.module'
@@ -19,6 +20,7 @@ import { UserModule } from './user/user.module'
 			useFactory: getGoogleRecaptchaConfig,
 			inject: [ConfigService]
 		}),
+		ScheduleModule.forRoot(),
 		AuthModule,
 		UserModule,
 		IntensiveModule,

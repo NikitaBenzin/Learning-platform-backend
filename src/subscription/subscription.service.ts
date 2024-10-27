@@ -22,42 +22,75 @@ export class SubscriptionService {
 		})
 	}
 
-	async createUserSubscription(userId: string, subscriptionPlanName: string) {
-		if (subscriptionPlanName === 'Free') {
-			const newSubscription = {
-				subscriptionPlanName,
-				userId
-			}
-
-			return this.prisma.userSubscription.create({
-				data: newSubscription
-			})
-		} else {
+	async createUserSubscription(
+		userId: string,
+		subscriptionPlanId: string = 'free'
+	) {
+		if (subscriptionPlanId === 'free') {
 			const subscriptionPlan = await this.prisma.subscriptionPlan.findUnique({
 				where: {
-					id: subscriptionPlanName
+					price: 0
 				}
 			})
-
-			const userSubscription = await this.prisma.userSubscription.findUnique({
-				where: {
+			return this.prisma.userSubscription.create({
+				data: {
+					subscriptionPlanId: subscriptionPlan.id,
 					userId
 				}
 			})
+		}
 
-			if (userSubscription.isActive) {
-				const endDate = userSubscription.endDate
-				endDate.setDate(endDate.getDate() + subscriptionPlan.duration)
-
-				return this.prisma.userSubscription.update({
-					where: {
-						userId
-					},
-					data: {
-						endDate
-					}
-				})
+		const userSubscription = await this.prisma.userSubscription.findUnique({
+			where: {
+				userId
 			}
+		})
+
+		const subscriptionPlan = await this.prisma.subscriptionPlan.findUnique({
+			where: {
+				id: subscriptionPlanId
+			}
+		})
+
+		if (!userSubscription) {
+			const startDate = new Date()
+			const endDate = new Date()
+			endDate.setDate(startDate.getDate() + subscriptionPlan.duration)
+
+			return this.prisma.userSubscription.create({
+				data: {
+					subscriptionPlanId: subscriptionPlan.id,
+					startDate,
+					endDate,
+					userId,
+					isActive: true
+				}
+			})
+		}
+
+		// Продление текущей подписки
+		if (userSubscription && userSubscription.isActive) {
+			const endDate = userSubscription.endDate
+			endDate.setDate(endDate.getDate() + subscriptionPlan.duration)
+
+			return this.prisma.userSubscription.update({
+				where: {
+					userId
+				},
+				data: {
+					endDate
+				}
+			})
+		} else {
+			return this.prisma.userSubscription.update({
+				where: {
+					userId
+				},
+				data: {
+					subscriptionPlanId,
+					isActive: true
+				}
+			})
 		}
 	}
 
@@ -81,7 +114,9 @@ export class SubscriptionService {
 		}
 
 		return this.prisma.subscriptionPlan.create({
-			data: subscription
+			data: {
+				...subscription
+			}
 		})
 	}
 

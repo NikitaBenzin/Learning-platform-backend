@@ -16,16 +16,16 @@ import { UserService } from './user.service'
 export class UserController {
 	constructor(private readonly userService: UserService) {}
 
-	@Get()
 	@Auth()
+	@Get()
 	async getProfile(@CurrentUser('id') id: string) {
 		return this.userService.getProfile(id)
 	}
 
 	@UsePipes(new ValidationPipe())
 	@HttpCode(200)
-	@Put('settings')
 	@Auth()
+	@Put('settings')
 	async updateProfile(@CurrentUser('id') id: string, @Body() dto: UserDto) {
 		return this.userService.update(id, dto)
 	}
