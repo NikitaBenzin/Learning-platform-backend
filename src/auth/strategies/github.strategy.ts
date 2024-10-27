@@ -1,10 +1,10 @@
-import { AuthService } from '@/auth/auth.service'
-import { IGithubProfile } from '@/auth/social-media/social-media-auth.types'
 import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { PassportStrategy } from '@nestjs/passport'
 import { Strategy } from 'passport-github2'
 import { VerifyCallback } from 'passport-google-oauth20'
+import { AuthService } from '../auth.service'
+import { IGithubProfile } from '../social-media/social-media-auth.types'
 
 @Injectable()
 export class GithubStrategy extends PassportStrategy(Strategy, 'github') {

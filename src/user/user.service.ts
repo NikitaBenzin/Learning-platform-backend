@@ -33,6 +33,13 @@ export class UserService {
 		})
 	}
 
+	async getStorage(page: number) {
+		return this.prisma.file.findMany({
+			skip: (page - 1) * 20,
+			take: 20
+		})
+	}
+
 	async getProfile(id: string) {
 		const profile = await this.getById(id)
 		let subscriptionEndDate: string

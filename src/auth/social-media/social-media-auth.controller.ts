@@ -1,4 +1,5 @@
 import { Get, Req, Res, UseGuards } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 import { AuthGuard } from '@nestjs/passport'
 import { Response } from 'express'
 import { AuthService } from '../auth.service'
@@ -10,6 +11,7 @@ export class SocialMediaAuthController {
 	constructor(
 		private readonly socialMediaAuthService: SocialMediaAuthService,
 		private readonly authService: AuthService,
+		private readonly configService: ConfigService,
 		private readonly refreshTokenService: RefreshTokenService
 	) {}
 

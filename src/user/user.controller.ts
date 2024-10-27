@@ -3,10 +3,12 @@ import {
 	Controller,
 	Get,
 	HttpCode,
+	Param,
 	Put,
 	UsePipes,
 	ValidationPipe
 } from '@nestjs/common'
+import { Role } from '@prisma/client'
 import { Auth } from 'src/auth/decorators/auth.decorator'
 import { CurrentUser } from 'src/auth/decorators/user.decorator'
 import { UserDto } from './dto/user.dto'
@@ -28,5 +30,13 @@ export class UserController {
 	@Put('settings')
 	async updateProfile(@CurrentUser('id') id: string, @Body() dto: UserDto) {
 		return this.userService.update(id, dto)
+	}
+
+	@UsePipes(new ValidationPipe())
+	@HttpCode(200)
+	@Auth(Role.PREMIUM)
+	@Get('storage/:page')
+	async getStorage(@Param('page') page: number) {
+		return this.userService.getStorage(page)
 	}
 }

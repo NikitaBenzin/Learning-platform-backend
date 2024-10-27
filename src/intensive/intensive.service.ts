@@ -17,11 +17,29 @@ export class IntensiveService {
 	getByName(name: string) {
 		const intensive = this.prisma.intensive.findFirst({
 			where: { name },
-			include: { video: true }
+			include: {
+				video: {
+					orderBy: { createdAt: 'asc' }
+				}
+			}
 		})
 
 		if (!intensive)
 			throw new NotFoundException(`Intensive with name "${name}" not found`)
+
+		return intensive
+	}
+
+	async getVideo(intensiveName: string, videoName: string) {
+		const intensive = this.prisma.intensive.findFirst({
+			where: { name: intensiveName },
+			include: {
+				video: {
+					where: { name: videoName }
+				}
+			}
+		})
+		if (!intensive) throw new NotFoundException(`Not found`)
 
 		return intensive
 	}
