@@ -19,4 +19,7 @@ export class UserDto {
 	@IsOptional()
 	@IsString()
 	image?: string
+
+	@IsOptional()
+	verificationToken?: string
 }

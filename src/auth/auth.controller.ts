@@ -12,17 +12,21 @@ import {
 import { Request, Response } from 'express'
 import { AuthService } from './auth.service'
 import { AuthDto } from './dto/auth.dto'
+import { RefreshTokenService } from './refresh-token.service'
 
 @Controller('auth')
 export class AuthController {
-	constructor(private readonly authService: AuthService) {}
+	constructor(
+		private readonly authService: AuthService,
+		private readonly refreshTokenService: RefreshTokenService
+	) {}
 
 	@UsePipes(new ValidationPipe())
 	@HttpCode(200)
 	@Post('login')
 	async login(@Body() dto: AuthDto, @Res({ passthrough: true }) res: Response) {
 		const { refreshToken, ...response } = await this.authService.login(dto)
-		this.authService.addRefreshTokenToResponse(res, refreshToken)
+		this.refreshTokenService.addRefreshTokenToResponse(res, refreshToken)
 
 		return response
 	}
@@ -35,7 +39,7 @@ export class AuthController {
 		@Res({ passthrough: true }) res: Response
 	) {
 		const { refreshToken, ...response } = await this.authService.register(dto)
-		this.authService.addRefreshTokenToResponse(res, refreshToken)
+		this.refreshTokenService.addRefreshTokenToResponse(res, refreshToken)
 
 		return response
 	}
@@ -50,7 +54,7 @@ export class AuthController {
 			req.cookies[this.authService.REFRESH_TOKEN_NAME]
 
 		if (!refreshTokenFromCookies) {
-			this.authService.removeRefreshTokenFromResponse(res)
+			this.refreshTokenService.removeRefreshTokenFromResponse(res)
 			throw new UnauthorizedException('Refresh token not passed')
 		}
 
@@ -58,7 +62,7 @@ export class AuthController {
 			refreshTokenFromCookies
 		)
 
-		this.authService.addRefreshTokenToResponse(res, refreshToken)
+		this.refreshTokenService.addRefreshTokenToResponse(res, refreshToken)
 
 		return response
 	}
@@ -66,7 +70,7 @@ export class AuthController {
 	@HttpCode(200)
 	@Post('logout')
 	async logout(@Res({ passthrough: true }) res: Response) {
-		this.authService.removeRefreshTokenFromResponse(res)
+		this.refreshTokenService.removeRefreshTokenFromResponse(res)
 		return true
 	}
 }
