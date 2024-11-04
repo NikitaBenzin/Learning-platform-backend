@@ -11,7 +11,7 @@ export class EmailService {
 		return this.mailerService.sendMail({ to, subject, html })
 	}
 
-	async sendVerificationEmail(to: string, verificationLink: string) {
+	async sendVerification(to: string, verificationLink: string) {
 		const html = await render(VerificationEmail({ url: verificationLink }))
 		return this.sendEmail(to, 'Verify your email', html)
 	}

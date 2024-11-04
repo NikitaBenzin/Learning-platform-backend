@@ -67,7 +67,7 @@ export class UserService {
 	}
 
 	async create(dto: AuthDto) {
-		const user = await this.prisma.user.create({
+		return await this.prisma.user.create({
 			data: {
 				...dto,
 				password: await hash(dto.password)
@@ -76,8 +76,6 @@ export class UserService {
 				subscription: true
 			}
 		})
-
-		return user
 	}
 
 	async findOrCreateSocialUser(profile: IGoogleProfile | IGithubProfile) {

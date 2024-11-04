@@ -12,7 +12,6 @@ import { AdminService } from './admin.service'
 	imports: [
 		IntensiveModule,
 		SubscriptionModule,
-		ConfigModule,
 		JwtModule.registerAsync({
 			imports: [ConfigModule],
 			inject: [ConfigService],

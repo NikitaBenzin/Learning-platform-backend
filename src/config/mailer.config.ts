@@ -16,6 +16,6 @@ export const getMailerConfig = async (
 	},
 	defaults: {
 		// От кого ведем отправку
-		from: '"htmllessons" <no-reply@htmllessons.ru>'
+		from: '"Dev.Learn" <no-reply@dev.learn.ua>'
 	}
 })

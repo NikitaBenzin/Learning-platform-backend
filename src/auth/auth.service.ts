@@ -4,7 +4,6 @@ import {
 	NotFoundException,
 	UnauthorizedException
 } from '@nestjs/common'
-import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
 import { Role, User } from '@prisma/client'
 import { verify } from 'argon2'
@@ -16,16 +15,15 @@ import type { AuthDto } from './dto/auth.dto'
 
 @Injectable()
 export class AuthService {
-	private readonly TOKEN_EXPIRATION_ACCESS = '1h'
-	private readonly TOKEN_EXPIRATION_REFRESH = '7d'
-
 	constructor(
 		private jwt: JwtService,
 		private userService: UserService,
-		private configService: ConfigService,
 		private prisma: PrismaService,
 		private emailService: EmailService
 	) {}
+
+	private readonly TOKEN_EXPIRATION_ACCESS = '1h'
+	private readonly TOKEN_EXPIRATION_REFRESH = '7d'
 
 	async login(dto: AuthDto) {
 		const user = await this.validateUser(dto)
@@ -38,7 +36,7 @@ export class AuthService {
 
 		const user = await this.userService.create(dto)
 
-		await this.emailService.sendVerificationEmail(
+		await this.emailService.sendVerification(
 			user.email,
 			`http://localhost:4200/verify-email?token=${user.verificationToken}`
 		)
