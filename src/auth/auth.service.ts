@@ -10,7 +10,7 @@ import { verify } from 'argon2'
 import { omit } from 'lodash'
 import { EmailService } from 'src/email/email.service'
 import { PrismaService } from 'src/prisma.service'
-import { UserService } from 'src/user/user.service'
+import { UserService } from 'src/student/user.service'
 import type { AuthDto } from './dto/auth.dto'
 
 @Injectable()

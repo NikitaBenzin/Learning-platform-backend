@@ -7,8 +7,8 @@ import { AdminModule } from './admin/admin.module'
 import { AuthModule } from './auth/auth.module'
 import { getGoogleRecaptchaConfig } from './config/google-recaptcha.config'
 import { IntensiveModule } from './intensive/intensive.module'
+import { UserModule } from './student/user.module'
 import { SubscriptionModule } from './subscription/subscription.module'
-import { UserModule } from './user/user.module'
 
 @Module({
 	imports: [

@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common'
-import { UserService } from 'src/user/user.service'
+import { UserService } from 'src/student/user.service'
 import { TSocialProfile } from './social-media-auth.types'
 
 @Injectable()
