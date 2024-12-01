@@ -22,24 +22,7 @@ export class SubscriptionService {
 		})
 	}
 
-	async createUserSubscription(
-		userId: string,
-		subscriptionPlanId: string = 'free'
-	) {
-		if (subscriptionPlanId === 'free') {
-			const subscriptionPlan = await this.prisma.subscriptionPlan.findUnique({
-				where: {
-					price: 0
-				}
-			})
-			return this.prisma.userSubscription.create({
-				data: {
-					subscriptionPlanId: subscriptionPlan.id,
-					userId
-				}
-			})
-		}
-
+	async createUserSubscription(userId: string, subscriptionPlanId: string) {
 		const userSubscription = await this.prisma.userSubscription.findUnique({
 			where: {
 				userId
@@ -106,31 +89,22 @@ export class SubscriptionService {
 	}
 
 	create(dto: SubscriptionDto) {
-		const subscription = {
-			name: dto.name,
-			price: dto.price,
-			duration: dto.duration,
-			description: dto.description
-		}
-
 		return this.prisma.subscriptionPlan.create({
-			data: {
-				...subscription
-			}
+			data: dto
 		})
 	}
 
-	update(id: string, dto: SubscriptionDto) {
+	update(slug: string, dto: SubscriptionDto) {
 		const data = dto
 		return this.prisma.subscriptionPlan.update({
 			where: {
-				id
+				slug
 			},
 			data
 		})
 	}
 
-	async delete(id: string) {
-		return this.prisma.subscriptionPlan.delete({ where: { id } })
+	async delete(slug: string) {
+		return this.prisma.subscriptionPlan.delete({ where: { slug } })
 	}
 }

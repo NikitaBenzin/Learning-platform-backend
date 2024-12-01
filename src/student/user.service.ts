@@ -7,15 +7,11 @@ import {
 	IGoogleProfile
 } from 'src/auth/social-media/social-media-auth.types'
 import { PrismaService } from 'src/prisma.service'
-import { SubscriptionService } from 'src/subscription/subscription.service'
 import type { UserDto } from './dto/user.dto'
 
 @Injectable()
 export class UserService {
-	constructor(
-		private prisma: PrismaService,
-		private subscriptionService: SubscriptionService
-	) {}
+	constructor(private prisma: PrismaService) {}
 
 	getById(id: string) {
 		return this.prisma.user.findUnique({
@@ -42,23 +38,20 @@ export class UserService {
 
 	async getProfile(id: string) {
 		const profile = await this.getById(id)
-		let subscriptionEndDate: string
+		let subscriptionEndDate: string = 'No subscription'
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		const { password, ...data } = profile
 
-		if (profile.subscription == null)
-			await this.subscriptionService.createUserSubscription(id)
-
-		if (profile.subscription.isActive === false) {
-			subscriptionEndDate = 'No subscription'
-		} else {
+		if (
+			profile.subscription != null &&
+			profile.subscription.isActive === true
+		) {
 			const day = profile.subscription.endDate.getDate()
 			const month = profile.subscription.endDate.getMonth() + 1
 			const year = profile.subscription.endDate.getFullYear()
 
 			subscriptionEndDate = `${day}.${month}.${year}`
 		}
-
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		const { password, ...data } = profile
 
 		return {
 			...data,

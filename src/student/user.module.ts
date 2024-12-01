@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common'
-import { IntensiveModule } from 'src/intensive/intensive.module'
+import { IntensiveModule } from 'src/intensives/intensive.module'
 import { PrismaService } from 'src/prisma.service'
 import { SubscriptionModule } from 'src/subscription/subscription.module'
 import { UserController } from './user.controller'

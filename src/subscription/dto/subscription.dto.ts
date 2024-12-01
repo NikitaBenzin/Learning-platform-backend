@@ -1,20 +1,19 @@
-import { IsArray, IsInt, IsOptional, IsString } from 'class-validator'
+import { IsArray, IsInt, IsString } from 'class-validator'
 
 export class SubscriptionDto {
-	@IsOptional()
 	@IsString()
-	name?: string
+	slug: string
 
-	@IsOptional()
+	@IsString()
+	title: string
+
 	@IsInt()
-	price?: number
+	price: number
 
-	@IsOptional()
 	@IsString()
-	duration?: number
+	duration: number
 
-	@IsOptional()
 	@IsArray()
-	description?: string
+	description: string
 	// description?: string[]
 }

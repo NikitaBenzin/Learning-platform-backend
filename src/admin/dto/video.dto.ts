@@ -3,7 +3,11 @@ import { IsOptional, IsString } from 'class-validator'
 export class VideoDto {
 	@IsOptional()
 	@IsString()
-	name?: string
+	slug?: string
+
+	@IsOptional()
+	@IsString()
+	title?: string
 
 	@IsOptional()
 	@IsString()

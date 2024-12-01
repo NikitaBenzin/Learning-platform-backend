@@ -53,8 +53,9 @@ model SubscriptionPlan {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  name               String             @unique
-  price              Int                @unique
+  slug               String             @unique
+  title              String
+  price              Int
   duration           Int // Duration in days (for example, 30 for monthly, 365 for yearly)
   description        String
   usersSubscriptions UserSubscription[]
@@ -67,10 +68,12 @@ model Intensive {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  name         String  @unique
-  description  String
-  video        Video[]
-  previewImage String  @map("preview_image")
+  slug                 String  @unique
+  title                String
+  isPublished          Boolean @default(false)
+  videoPresentationUrl String
+  video                Video[]
+  previewImage         String  @map("preview_image")
 
   @@map("intensive")
 }
@@ -80,7 +83,8 @@ model Video {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  name        String
+  slug        String    @unique
+  title       String
   description String
   videoUrl    String    @map("video_url")
   intensive   Intensive @relation(fields: [intensiveId], references: [id], onDelete: Cascade)
@@ -94,7 +98,7 @@ model File {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  name    String
+  title   String @unique
   fileUrl String @map("file_url")
 
   @@map("files")

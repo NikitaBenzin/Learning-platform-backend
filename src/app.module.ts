@@ -6,7 +6,8 @@ import { GoogleRecaptchaModule } from '@nestlab/google-recaptcha'
 import { AdminModule } from './admin/admin.module'
 import { AuthModule } from './auth/auth.module'
 import { getGoogleRecaptchaConfig } from './config/google-recaptcha.config'
-import { IntensiveModule } from './intensive/intensive.module'
+import { FileModule } from './file/file.module'
+import { IntensiveModule } from './intensives/intensive.module'
 import { UserModule } from './student/user.module'
 import { SubscriptionModule } from './subscription/subscription.module'
 
@@ -25,7 +26,8 @@ import { SubscriptionModule } from './subscription/subscription.module'
 		UserModule,
 		IntensiveModule,
 		AdminModule,
-		SubscriptionModule
+		SubscriptionModule,
+		FileModule
 	]
 })
 export class AppModule {}

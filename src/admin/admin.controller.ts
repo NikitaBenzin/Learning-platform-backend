@@ -13,8 +13,9 @@ import {
 import { Role } from '@prisma/client'
 import { Auth } from 'src/auth/decorators/auth.decorator'
 import { CurrentUser } from 'src/auth/decorators/user.decorator'
-import { IntensiveDto } from 'src/intensive/dto/intensive.dto'
-import { IntensiveService } from 'src/intensive/intensive.service'
+import { IntensiveDto } from 'src/intensives/dto/intensive.dto'
+import { IntensiveService } from 'src/intensives/intensive.service'
+import { SubscriptionDto } from 'src/subscription/dto/subscription.dto'
 import { SubscriptionService } from 'src/subscription/subscription.service'
 import { AdminService } from './admin.service'
 import { FileDto } from './dto/file.dto'
@@ -24,7 +25,7 @@ import { VideoDto } from './dto/video.dto'
 export class AdminController {
 	constructor(
 		private readonly adminService: AdminService,
-		private readonly intensiveService: IntensiveService,
+		private readonly intensivesService: IntensiveService,
 		private readonly subscriptionService: SubscriptionService
 	) {}
 
@@ -36,73 +37,91 @@ export class AdminController {
 	}
 
 	// Requests bellow for SUBSCRIPTIONS
+	@UsePipes(new ValidationPipe())
+	@HttpCode(200)
 	@Auth(Role.ADMIN)
 	@Post('subscription')
-	async createSubscription(@Body() dto: IntensiveDto) {
+	async createSubscription(@Body() dto: SubscriptionDto) {
 		return this.subscriptionService.create(dto)
 	}
 
 	@UsePipes(new ValidationPipe())
 	@HttpCode(200)
 	@Auth(Role.ADMIN)
-	@Put('subscription/:id')
-	async updateSubscription(@Param('id') id: string, @Body() dto: IntensiveDto) {
-		return this.subscriptionService.update(id, dto)
+	@Put('subscription/:slug')
+	async updateSubscription(
+		@Param('slug') slug: string,
+		@Body() dto: SubscriptionDto
+	) {
+		return this.subscriptionService.update(slug, dto)
 	}
 
 	@Auth(Role.ADMIN)
-	@Delete('subscription/:id')
-	async deleteSubscription(@Param('id') id: string) {
-		return this.subscriptionService.delete(id)
+	@Delete('subscription/:slug')
+	async deleteSubscription(@Param('slug') slug: string) {
+		return this.subscriptionService.delete(slug)
 	}
 
-	// Requests bellow for INTENSIVES
+	// Requests bellow for INTENSIVESS
+	@UsePipes(new ValidationPipe())
+	@HttpCode(200)
 	@Auth(Role.ADMIN)
-	@Post('intensive')
-	async createIntensive(@Body() dto: IntensiveDto) {
-		return this.intensiveService.create(dto)
+	@Post('intensives')
+	async createIntensives(@Body() dto: IntensiveDto) {
+		return this.intensivesService.create(dto)
 	}
 
 	@UsePipes(new ValidationPipe())
 	@HttpCode(200)
 	@Auth(Role.ADMIN)
-	@Put('intensive/:id')
-	async updateIntensive(@Param('id') id: string, @Body() dto: IntensiveDto) {
-		return this.intensiveService.update(id, dto)
+	@Put('intensives/:slug')
+	async updateIntensives(
+		@Param('slug') slug: string,
+		@Body() dto: IntensiveDto
+	) {
+		return this.intensivesService.update(slug, dto)
 	}
 
 	@Auth(Role.ADMIN)
-	@Delete('intensive/:id')
-	async deleteIntensive(@Param('id') id: string) {
-		return this.intensiveService.delete(id)
+	@Delete('intensives/:slug')
+	async deleteIntensives(@Param('slug') slug: string) {
+		return this.intensivesService.delete(slug)
 	}
 
 	// Requests bellow for VIDEO
+	@UsePipes(new ValidationPipe())
+	@HttpCode(200)
 	@Auth(Role.ADMIN)
-	@Post('intensive/video')
-	async addVideoToIntensive(@Body() dto: VideoDto) {
+	@Post('intensives/video')
+	async addVideoToIntensives(@Body() dto: VideoDto) {
 		return this.adminService.addVideoToIntensive(dto)
 	}
 
+	@UsePipes(new ValidationPipe())
+	@HttpCode(200)
 	@Auth(Role.ADMIN)
-	@Put('intensive/video/:id')
-	async updateVideo(@Param(':id') id: string, @Body() dto: VideoDto) {
-		return this.adminService.updateVideo(id, dto)
+	@Put('intensives/video/:slug')
+	async updateVideo(@Param(':slug') slug: string, @Body() dto: FileDto) {
+		return this.adminService.updateVideo(slug, dto)
 	}
 
 	@Auth(Role.ADMIN)
-	@Delete('intensive/video/:id')
-	async removeVideo(@Param(':id') id: string) {
-		return this.adminService.removeVideo(id)
+	@Delete('intensives/video/:slug')
+	async removeVideo(@Param(':slug') slug: string) {
+		return this.adminService.removeVideo(slug)
 	}
 
 	// Requests bellow for STORAGE
+	@UsePipes(new ValidationPipe())
+	@HttpCode(200)
 	@Auth(Role.ADMIN)
 	@Post('storage')
 	async addFile(@Body() dto: FileDto) {
 		return this.adminService.addFile(dto)
 	}
 
+	@UsePipes(new ValidationPipe())
+	@HttpCode(200)
 	@Auth(Role.ADMIN)
 	@Put('storage/:id')
 	async updateFile(@Param(':id') id: string, @Body() dto: FileDto) {
