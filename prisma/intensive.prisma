@@ -1,0 +1,45 @@
+model Intensive {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  slug                 String  @unique
+  title                String
+  isPublished          Boolean @default(false)
+  videoPresentationUrl String
+  video                Video[]
+  previewImage         String  @map("preview_image")
+
+  additionalInfo   AdditionalInfo? @relation(fields: [additionalInfoId], references: [id])
+  additionalInfoId String?         @unique
+
+  @@map("intensive")
+}
+
+model AdditionalInfo {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  price          Int    @default(250)
+  lessonsAmount  String @map("lessons_amount")
+  hoursAmount    String @map("hours_amount")
+  exerciseAmount String @map("exercise_amount")
+
+  Intensive Intensive?
+}
+
+model Video {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  slug        String    @unique
+  title       String
+  description String
+  videoUrl    String    @map("video_url")
+  intensive   Intensive @relation(fields: [intensiveId], references: [id], onDelete: Cascade)
+  intensiveId String
+
+  @@map("video")
+}
